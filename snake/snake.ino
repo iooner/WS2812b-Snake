@@ -68,12 +68,12 @@ LinkedList<Point*> snakePositions = LinkedList<Point*>();
 Point *applePosition;
 
 // For Style ;)
-CRGB appleColor = CRGB(255, 0, 0);
-CRGB snakeColor = CRGB(0, 255, 0);
-CRGB pausedAppleColor = CRGB(0, 255, 255);
-CRGB pausedSnakeColor = CRGB(0, 0, 255);
+CRGB appleColor = CRGB(0, 255, 0);
+CRGB snakeColor = CRGB(255, 0, 0);
+CRGB pausedAppleColor = CRGB(0, 0, 255);
+CRGB pausedSnakeColor = CRGB(0, 255, 255);
 CRGB emptyColor = CRGB(0, 0, 0);
-CRGB solidColor = CRGB(255, 0, 0);
+CRGB solidColor = CRGB(0, 255, 0);
 
 void setup() {
   pinMode(BTUP_PIN, INPUT_PULLUP);
@@ -149,22 +149,22 @@ boolean snakeContainsPosition(int x, int y) {
 // read direction from analog stick
 int getCurrentDirection(){
   int dir = currDirection;
-    if(digitalRead(BTUP_PIN) == LOW) {
+    if(digitalRead(BTUP_PIN) == LOW && currDirection != 1) {
       dir = 0;
       Serial.print("Direction HAUT - ");
       Serial.println(dir);
     }
-    else if(digitalRead(BTDOWN_PIN) == LOW) {
+    else if(digitalRead(BTDOWN_PIN) == LOW  && currDirection != 0) {
       dir = 1;
       Serial.print("Direction BAS - ");
       Serial.println(dir);
     }
-    else if(digitalRead(BTLEFT_PIN) == LOW) {
+    else if(digitalRead(BTLEFT_PIN) == LOW  && currDirection != 3) {
       dir = 2;
       Serial.print("Direction GAUCHE - ");
       Serial.println(dir);
     }
-    else if(digitalRead(BTRIGHT_PIN) == LOW) {
+    else if(digitalRead(BTRIGHT_PIN) == LOW  && currDirection != 2) {
       dir = 3;
       Serial.print("Direction DROITE - ");
       Serial.println(dir);
@@ -172,6 +172,7 @@ int getCurrentDirection(){
     else{
       dir = currDirection;
     }
+
   return dir;
 }
 
