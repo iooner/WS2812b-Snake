@@ -21,8 +21,7 @@ const int BTLEFT_PIN = 22;
 const int BTOK_PIN = 21;   
 
 //Joystick
-const int xPin        = A0;
-const int yPin        = A0;
+
 
 // Directions
 #define DIR_UP    0
@@ -84,9 +83,6 @@ void setup() {
   pinMode(BTOK_PIN, INPUT_PULLUP);
   Serial.begin(115200);
   
-  // setup analog stick
-  pinMode(xPin, INPUT);
-  pinMode(yPin, INPUT);
 
   
   // pick starting position
@@ -153,39 +149,29 @@ boolean snakeContainsPosition(int x, int y) {
 // read direction from analog stick
 int getCurrentDirection(){
   int dir = currDirection;
-  int xPosition = analogRead(xPin);
-  int yPosition = analogRead(yPin);
-  int mapX = map(xPosition, 0, 1023, -512, 512);
-  int mapY = map(yPosition, 0, 1023, -512, 512);
-
-  // The max is 512, so let's assume that if the analog stick is over 3/4ths in one direction then we are good
-  // Then choose the direction based on the which value is greater
-  //left
-  int absX = abs(mapX);
-  int absY = abs(mapY);
-  int threshold = 384;
-  if(absX > threshold || absY > threshold) {
-    dir = absX > absY ? getXDir(mapX) : getYDir(mapY);
-  }
-
-  //ensure you can't go the direction you just came
-  switch(dir) {
-    case DIR_UP:
-      dir = currDirection == DIR_DOWN ? DIR_DOWN : dir;
-      break;
-    case DIR_DOWN:
-      dir = currDirection == DIR_UP ? DIR_UP : dir;
-      break;
-    case DIR_LEFT:
-      dir = currDirection == DIR_RIGHT ? DIR_RIGHT : dir;
-      break;
-    case DIR_RIGHT:
-      dir = currDirection == DIR_DOWN ? DIR_LEFT : dir;
-      break;
-    default:
-      break;
-  }
-
+    if(digitalRead(BTUP_PIN) == LOW) {
+      dir = 0;
+      Serial.print("Direction HAUT - ");
+      Serial.println(dir);
+    }
+    else if(digitalRead(BTDOWN_PIN) == LOW) {
+      dir = 1;
+      Serial.print("Direction BAS - ");
+      Serial.println(dir);
+    }
+    else if(digitalRead(BTLEFT_PIN) == LOW) {
+      dir = 2;
+      Serial.print("Direction GAUCHE - ");
+      Serial.println(dir);
+    }
+    else if(digitalRead(BTRIGHT_PIN) == LOW) {
+      dir = 3;
+      Serial.print("Direction DROITE - ");
+      Serial.println(dir);
+    }
+    else{
+      dir = currDirection;
+    }
   return dir;
 }
 
